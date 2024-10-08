@@ -25,7 +25,7 @@ func main() {
 
 	// TODO: Render your base store page here
 	e.GET("/store", func(ctx echo.Context) error {
-		return Render(ctx, http.StatusOK, templates.Base(templates.Store(...)))
+		return Render(ctx, http.StatusOK, templates.Base(templates.Store(products)))
 	})
 
 	// TODO: Handle the form submission and return the purchase confirmation view
