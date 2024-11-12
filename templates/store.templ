@@ -1,0 +1,84 @@
+package templates
+
+import (  
+	"go-store/types"
+	"fmt"
+)
+
+templ Store() {
+    <section>
+        <h2>BUY OUR CAR PARTS</h2>
+        <form id="purchase-form" action="/purchase" method="post">
+            
+            <fieldset>
+                <legend>Product Information</legend>
+                <label for="product">Select a Car Part:</label>
+                <select id="product" name="product" required>
+                    <option value="">Select a Car Part</option>
+                    <option value="drive shaft" data-image="driveShaft.jpeg">$250 - Drive Shaft</option>
+                    <option value="piston rod" data-image="pistonRod.jpeg">$60 - Piston Rod</option>
+                    <option value="exhaust header" data-image="exhaustHeader.jpeg">$200 - Exhaust Header</option>
+                </select>
+                <div id="product-image">
+                    <img src="/assets/images/generic.jpeg" alt="Product Image" id="selected-product-image">
+                </div>
+                <label for="quantity">Quantity: *</label>
+                <input type="number" id="quantity" name="quantity" min="1" max="100" value="1" required>
+
+                <fieldset>
+                    <legend>Round Up for Donation?</legend>
+                    <input type="radio" id="donation-yes" name="donation" value="yes" checked>
+                    <label for="donation-yes">Yes</label>
+                    <input type="radio" id="donation-no" name="donation" value="no">
+                    <label for="donation-no">No</label>
+                </fieldset>
+            </fieldset>
+            <fieldset>
+                <legend>Personal Information</legend>
+                <label for="first-name">First Name: *</label>
+                <input type="text" id="first-name" name="first-name" required autocomplete="given-name">
+
+                <label for="last-name">Last Name: *</label>
+                <input type="text" id="last-name" name="last-name" required autocomplete="family-name">
+
+                <label for="email">Email: *</label>
+                <input type="email" id="email" name="email" required autocomplete="email">
+            </fieldset>
+
+            <button type="submit">Purchase</button>
+        </form>
+    </section>    
+}
+
+templ Confirmation(purchase types.ConfirmationData) {
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Go Webstore</title>
+        <link rel="stylesheet" href="/assets/styles/styles.css">
+    </head>
+    @Header()
+    <body>
+        <h1>Purchase Confirmation</h1>
+        <!-- Display the user's name dynamically -->
+        <p>Thank you, {purchase.FirstName} {purchase.LastName}!</p>
+        
+        <!-- Display the order details dynamically -->
+        <p>Your order details:</p>
+        <ul>
+            <li>Product: {purchase.Product}</li>
+            <li>Price: ${fmt.Sprintf("%.2f",purchase.Price)}</li>
+            <li>Quantity: {fmt.Sprintf("%d",purchase.Quantity)}</li>
+            <li>Subtotal: ${fmt.Sprintf("%.2f",purchase.Subtotal)}</li>
+            <li>Total with Tax: ${fmt.Sprintf("%.2f",purchase.TotalWithTax)}</li>
+            <li>Final Total: ${fmt.Sprintf("%.2f",purchase.FinalTotal)}</li>
+        </ul>
+
+        <!-- Display the tax rate dynamically -->
+        <p>Tax Rate: {fmt.Sprintf("%.2f", purchase.TaxRate)}%</p>
+    </body>
+    @Footer()
+    </html>
+}
